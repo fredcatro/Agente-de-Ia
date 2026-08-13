@@ -1,0 +1,3 @@
+Manual de TI:
+- Para solicitar um novo equipamento, abra um chamado no sistema interno.
+- A troca de senha de rede deve ser feita a cada 90 dias.
