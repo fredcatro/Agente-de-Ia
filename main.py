@@ -34,6 +34,9 @@ def iniciar_agente():
     print("🤖 Agente de IA da empresa pronto! Faça suas perguntas (ou digite 'sair').")
     print("=" * 60 + "\n")
 
+    # Inicializa a sessão de chat (evita os avisos de AFC do terminal)
+    chat = client.chats.create(model="gemini-2.5-flash")
+
     while True:
         pergunta_usuario = input("Você: ")
         if pergunta_usuario.lower() in ["sair", "exit"]:
@@ -54,10 +57,7 @@ PERGUNTA DO USUÁRIO:
 """
 
         try:
-            resposta = client.models.generate_content(
-                model="gemini-2.0-flash",
-                contents=prompt,
-            )
+            resposta = chat.send_message(prompt)
             print(f"\n🤖 Agente: {resposta.text}\n")
             print("-" * 60)
         except Exception as e:
