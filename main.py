@@ -35,7 +35,7 @@ def iniciar_agente():
     print("=" * 60 + "\n")
 
     # Inicializa a sessão de chat (evita os avisos de AFC do terminal)
-    chat = client.chats.create(model="gemini-2.5-flash")
+    chat = client.chats.create(model="gemini-2.0-flash")
 
     while True:
         pergunta_usuario = input("Você: ")
