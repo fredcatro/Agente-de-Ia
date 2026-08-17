@@ -55,7 +55,7 @@ PERGUNTA DO USUÁRIO:
 
         try:
             resposta = client.models.generate_content(
-                model="gemini-2.5-flash",
+                model="gemini-1.5-flash",
                 contents=prompt,
             )
             print(f"\n🤖 Agente: {resposta.text}\n")
