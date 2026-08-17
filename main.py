@@ -25,17 +25,29 @@ def iniciar_agente():
         return
 
     client = genai.Client(api_key=api_key)
-    
+
     print("🤖 Carregando base de conhecimento...")
     base_conhecimento = carregar_contexto("docs")
-    
+
     print("✅ Base carregada com sucesso!")
     print("=" * 60)
     print("🤖 Agente de IA da empresa pronto! Faça suas perguntas (ou digite 'sair').")
     print("=" * 60 + "\n")
 
-    # Inicializa a sessão de chat (evita os avisos de AFC do terminal)
-    chat = client.chats.create(model="gemini-2.0-flash")
+    system_instruction = f"""
+Você é um assistente virtual de suporte interno de uma empresa.
+Responda às perguntas do usuário utilizando estritamente as informações fornecidas abaixo na Base de Conhecimento.
+Se a informação não estiver na base, responda educadamente que não possui essa informação nos documentos internos.
+
+BASE DE CONHECIMENTO:
+{base_conhecimento}
+"""
+
+    # Inicializa a sessão de chat, já com a base de conhecimento fixada como instrução
+    chat = client.chats.create(
+        model="gemini-3.6-flash",
+        config={"system_instruction": system_instruction}
+    )
 
     while True:
         pergunta_usuario = input("Você: ")
@@ -43,21 +55,8 @@ def iniciar_agente():
             print("🤖 Agente finalizado. Até logo!")
             break
 
-        # Estrutura do prompt enviando a base de dados + pergunta do usuário
-        prompt = f"""
-Você é um assistente virtual de suporte interno de uma empresa.
-Responda à pergunta do usuário utilizando estritamente as informações fornecidas abaixo na Base de Conhecimento.
-Se a informação não estiver na base, responda educadamente que não possui essa informação nos documentos internos.
-
-BASE DE CONHECIMENTO:
-{base_conhecimento}
-
-PERGUNTA DO USUÁRIO:
-{pergunta_usuario}
-"""
-
         try:
-            resposta = chat.send_message(prompt)
+            resposta = chat.send_message(pergunta_usuario)
             print(f"\n🤖 Agente: {resposta.text}\n")
             print("-" * 60)
         except Exception as e:
